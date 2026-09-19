@@ -1,0 +1,22 @@
+# Merge these settings into ~/.codex/config.toml; back up the original first.
+# These are TOP-LEVEL keys and must precede [tables] in your existing file.
+# A real baseline model retains Codex's known model metadata. The gateway
+# intercepts this model ID by default; the actual upstream model may differ.
+model = "gpt-5.6-terra"
+model_provider = "jev_router"
+model_reasoning_effort = "medium"
+
+[features]
+enable_request_compression = false # Gateway accepts bounded, uncompressed JSON.
+
+[model_providers.jev_router]
+name = "JEV Intent Router"
+base_url = "http://127.0.0.1:8765/v1"
+env_key = "JEV_ROUTER_TOKEN"
+wire_api = "responses"
+requires_openai_auth = false
+supports_websockets = false
+# Never retry ambiguous generations automatically at the client either.
+request_max_retries = 0
+stream_max_retries = 0
+stream_idle_timeout_ms = 650000

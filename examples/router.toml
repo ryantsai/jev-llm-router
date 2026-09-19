@@ -1,0 +1,48 @@
+[server]
+host = "127.0.0.1"
+port = 8765
+token_env = "JEV_ROUTER_TOKEN"
+max_body_bytes = 16777216
+max_inflight = 16
+state_path = ".jev-router/affinity.sqlite3"
+affinity_ttl_seconds = 86400
+affinity_max_entries = 10000
+
+[upstream]
+base_url = "https://api.openai.com/v1"
+api_key_env = "JEV_UPSTREAM_API_KEY"
+connect_timeout = 10
+read_timeout = 600
+trust_env = false # Enable deliberately to honor corporate HTTP(S)_PROXY / certificate env.
+allow_loopback_http = false
+
+[routing]
+mode = "rules" # "hybrid" calls a small classifier only for ambiguous/default cases.
+auto_models = ["auto", "jev-auto", "gpt-5.6-terra"]
+default_tier = "terra"
+max_tier = "astra"
+max_effort = "high" # Raise to "max" explicitly for deeper reasoning.
+respect_client_effort = false # Codex sends a default effort; let the router replace it.
+classifier_tier = "luna"
+classifier_timeout = 5
+classifier_max_chars = 6000
+
+[models.luna]
+id = "gpt-5.6-luna"
+effort = "low"
+supported_efforts = ["none", "low", "medium", "high", "xhigh", "max"]
+
+[models.terra]
+id = "gpt-5.6-terra"
+effort = "medium"
+supported_efforts = ["none", "low", "medium", "high", "xhigh", "max"]
+
+[models.sol]
+id = "gpt-5.6-sol"
+effort = "high"
+supported_efforts = ["none", "low", "medium", "high", "xhigh", "max"]
+
+[models.astra]
+id = "gpt-6-astra"
+effort = "medium"
+supported_efforts = ["low", "medium", "high", "xhigh", "max"]
