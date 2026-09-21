@@ -1,0 +1,15 @@
+# Option 1 only: merge into your effective Codex config after backing it up.
+# Do not overwrite existing permissions, MCP servers, profiles, or login.
+# Top-level keys must precede [tables]. Use your preferred main model instead
+# if desired; the skill changes only the delegated worker's model and effort.
+model = "gpt-5.6-luna"
+model_provider = "openai"
+model_reasoning_effort = "low"
+
+# Merge into an existing [agents] table; do not duplicate it.
+[agents]
+enabled = true
+max_concurrent_threads_per_session = 1
+
+# Review inherited openai_base_url / provider URL overrides before switching
+# from Option 3. This file does not verify model availability or authenticate.
